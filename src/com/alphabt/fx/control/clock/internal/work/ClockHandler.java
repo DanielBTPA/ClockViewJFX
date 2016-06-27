@@ -1,7 +1,6 @@
-package com.alphabt.fx.control.clock.worker.work;
+package com.alphabt.fx.control.clock.internal.work;
 
 import com.alphabt.fx.control.clock.util.Executable;
-import javafx.application.Platform;
 
 import java.util.*;
 
@@ -91,5 +90,9 @@ public class ClockHandler {
             } catch (Exception e) {
             }
         }
+    }
+
+    public static void postProcess(Executable executable) {
+        threadOperation.post(executable);
     }
 }

@@ -1,17 +1,16 @@
 package com.alphabt.fx.control.clock.worker;
 
+import com.alphabt.fx.control.clock.internal.work.ClockState;
 import com.alphabt.fx.control.clock.util.AlarmBuilder;
 import com.alphabt.fx.control.clock.util.ClockFormat;
 import com.alphabt.fx.control.clock.util.ClockValue;
 import com.alphabt.fx.control.clock.util.Executable;
-import com.alphabt.fx.control.clock.worker.work.ClockHandler;
-import javafx.application.Platform;
 import javafx.beans.property.*;
 
 /**
  * Created by danielbt on 24/05/16.
  */
-public abstract class Worker extends ClockHandler {
+public abstract class Worker extends ClockState {
 
     private StringProperty labelProperty = new SimpleStringProperty();
     private ObjectProperty<ClockFormat> clockFormatProperty = new SimpleObjectProperty<>();

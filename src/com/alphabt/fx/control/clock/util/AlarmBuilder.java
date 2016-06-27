@@ -1,7 +1,7 @@
 package com.alphabt.fx.control.clock.util;
 
 import com.alphabt.fx.control.clock.worker.Worker;
-import com.alphabt.fx.control.clock.worker.work.ClockHandler;
+import com.alphabt.fx.control.clock.internal.work.ClockHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,11 +45,6 @@ public final class AlarmBuilder extends ClockHandler {
 
     public AlarmBuilder withPause(boolean pause) {
         checkSubmit();
-
-        if (!(worker instanceof Controllable))
-            throw new IllegalStateException("The class " + worker.getClass().getSimpleName() +
-                    " not implement Controllable.");
-
         this.pause = pause;
         return this;
     }
@@ -113,6 +108,10 @@ public final class AlarmBuilder extends ClockHandler {
         if (value == null) {
             throw new NullPointerException("Put an value with 'withValue()' to compute.");
         }
+
+        if (pause && !(worker instanceof Controllable))
+            throw new IllegalStateException("The class " + worker.getClass().getSimpleName() +
+                    " not implement Controllable.");
 
         checkSubmit();
 

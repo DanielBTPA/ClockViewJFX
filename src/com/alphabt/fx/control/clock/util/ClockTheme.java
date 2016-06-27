@@ -52,6 +52,12 @@ public class ClockTheme {
         return rippleFillProperty().get();
     }
 
+    @Override
+    public String toString() {
+        return "[backgroundFill: " + backgroundFillProperty.get() + ", textFill: " +
+                textFillProperty.get() + ", rippleFill: " + rippleFillProperty.get() + "]";
+    }
+
     public static final class Colors {
         public static final ClockTheme RED_DARK = ClockTheme.createTheme(Color.web("#f44336"), Color.WHITE,
                 Color.web("#b71c1c"));

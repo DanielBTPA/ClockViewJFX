@@ -10,7 +10,7 @@ public interface Alterable<E> {
 
     Selector<E> selector();
 
-    abstract class Selector<E> {
+    abstract class Selector<E> implements SelectorListener<E> {
 
         private E[] elements;
         private int position;
@@ -21,8 +21,6 @@ public interface Alterable<E> {
         }
 
         protected abstract E[] getElements();
-
-        protected abstract void onChange(E object);
 
         public E change() {
             if (elements != null) {
@@ -41,5 +39,9 @@ public interface Alterable<E> {
                 throw new NullPointerException("Use 'getElements' for return objects to be use.");
             }
         }
+    }
+
+    interface SelectorListener<E> {
+        void onChange(E object);
     }
 }

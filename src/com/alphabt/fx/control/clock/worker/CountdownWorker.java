@@ -9,8 +9,9 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 public class CountdownWorker extends Worker implements Controllable, Notifiable, Alterable<ClockFormat> {
 
+    private static final String OLD_VALUE = "old_value";
+
     private Selector<ClockFormat> clockFormatSelector;
-    private ClockValue oldValue;
     private AlarmBuilder alarmBuilder;
     private ObjectProperty<State> stateProperty = new SimpleObjectProperty<>(State.DONED);
 
@@ -35,12 +36,18 @@ public class CountdownWorker extends Worker implements Controllable, Notifiable,
             }
 
             @Override
-            protected void onChange(ClockFormat object) {
+            public void onChange(ClockFormat object) {
                 setFormat(object);
             }
         };
 
-        oldValue = getValue().getClonedValue();
+        revalidate();
+    }
+
+    @Override
+    public void setValue(ClockValue value) {
+        super.setValue(value);
+        revalidate();
     }
 
     @Override
@@ -72,9 +79,15 @@ public class CountdownWorker extends Worker implements Controllable, Notifiable,
                 }
             }
         } else if (isStoped()) {
+            ClockValue oldValue = (ClockValue) getInstanceState(OLD_VALUE);
             value.setAllValues(oldValue);
             stateProperty.set(State.DONED);
         }
+    }
+
+    @Override
+    protected void onRevalidate() {
+        putInstanceState(OLD_VALUE, getValue().getClonedValue());
     }
 
     public void setAlarmBuilder(AlarmBuilder notification) {

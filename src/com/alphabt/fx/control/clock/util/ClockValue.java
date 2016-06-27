@@ -23,45 +23,29 @@ public class ClockValue implements Cloneable {
         return new ClockValue(firstValue, 0, 0, 0);
     }
 
-    public static ClockValue values(String parseValue) {
-        if (!parseValue.contains(":")) {
-            throw new IllegalArgumentException("Need be on this format: '00:00:00:00'.");
-        }
-
-        String[] parse = parseValue.split(":");
-
-        if (parse.length > 4) {
-            throw new IllegalArgumentException("Max 4 values.");
-        }
-
-        int[] values = new int[4];
-
-        for (int i = 0; i < parse.length; i++) {
-            values[i] = Integer.valueOf(parse[i]);
-        }
-
-        return new ClockValue(values);
-    }
-
     private int firstValue, secondValue, thirdValue, fourthValue;
 
-    private ClockValue(int... values) {
-        setAllValues(values[0], values[1], values[2], values[3]);
+    private ClockValue(int firstValue, int secondValue, int thirdValue, int fourthValue) {
+        setAllValues(firstValue, secondValue, thirdValue, fourthValue);
     }
 
     public void setFirstValue(int value) {
+        checkValues(value);
         this.firstValue = value;
     }
 
     public void setSecondValue(int value) {
+        checkValues(value);
         this.secondValue = value;
     }
 
     public void setThirdValue(int value) {
+        checkValues(value);
         this.thirdValue = value;
     }
 
     public void setFourthValue(int value) {
+        checkValues(value);
         this.fourthValue = value;
     }
 
@@ -70,6 +54,8 @@ public class ClockValue implements Cloneable {
         this.secondValue = secondValue;
         this.thirdValue = thirdValue;
         this.fourthValue = fourthValue;
+
+        checkValues(this.firstValue, this.secondValue, this.thirdValue, this.fourthValue);
     }
 
     public void setAllValues(ClockValue newValue) {
@@ -121,5 +107,12 @@ public class ClockValue implements Cloneable {
             e.printStackTrace();
         }
         return value;
+    }
+
+    private void checkValues(int... values) {
+        for (int value : values) {
+            if (value > 99)
+                throw new IllegalArgumentException("Only values up to 99.");
+        }
     }
 }

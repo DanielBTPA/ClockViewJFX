@@ -1,7 +1,9 @@
 package com.alphabt.fx.control.clock;
 
+import com.alphabt.fx.control.clock.internal.skin.ClockViewSkin;
 import com.alphabt.fx.control.clock.util.AlarmBuilder;
 import com.alphabt.fx.control.clock.util.ClockTheme;
+import com.alphabt.fx.control.clock.util.ClockTools;
 import com.alphabt.fx.control.clock.worker.Worker;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
@@ -15,10 +17,10 @@ import javafx.scene.control.Skin;
 public class ClockView extends Control {
 
     private ObjectProperty<Worker> workerProperty = new SimpleObjectProperty<>(this, "chrworker");
-    private ObjectProperty<ClockTheme> themeProperty = new SimpleObjectProperty<>(this, "themeProperty", ClockTheme.DEFAULT_LIGHT);
+    private ObjectProperty<ClockTheme> themeProperty = new SimpleObjectProperty<>(ClockTheme.DEFAULT_LIGHT);
     private DoubleProperty radiusProperty = new SimpleDoubleProperty(this, "radius", 60.0);
     private ObjectProperty<EventHandler<ActionEvent>> onActionProperty = new SimpleObjectProperty<>(this, "onAction");
-    private StringProperty labelProperty = new SimpleStringProperty(this, "labelProperty", "--:--:--");
+    private StringProperty labelProperty = new SimpleStringProperty(this, "labelProperty", ClockTools.EMPTY_LABEL);
     private ObjectProperty<AlarmBuilder> attachAlarmBuilderProperty = new SimpleObjectProperty();
 
     public ClockView() {
@@ -82,7 +84,7 @@ public class ClockView extends Control {
     }
 
     public void setTheme(ClockTheme value) {
-        themeProperty.set(value);
+        themeProperty.setValue(value);
     }
 
     public ClockTheme getTheme() {

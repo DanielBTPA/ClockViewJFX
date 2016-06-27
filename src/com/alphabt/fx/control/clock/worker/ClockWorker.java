@@ -52,7 +52,7 @@ public class ClockWorker extends Worker implements Alterable<ClockFormat> {
             }
 
             @Override
-            protected void onChange(ClockFormat object) {
+            public void onChange(ClockFormat object) {
                 setFormat(object);
             }
         };

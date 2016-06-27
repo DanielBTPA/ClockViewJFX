@@ -35,7 +35,7 @@ public class TimerWorker extends Worker implements Controllable, Notifiable, Alt
             }
 
             @Override
-            protected void onChange(ClockFormat object) {
+            public void onChange(ClockFormat object) {
                 setFormat(object);
             }
         };

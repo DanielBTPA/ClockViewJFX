@@ -1,6 +1,8 @@
-package com.alphabt.fx.control.clock;
+package com.alphabt.fx.control.clock.internal.skin;
 
+import com.alphabt.fx.control.clock.ClockView;
 import com.alphabt.fx.control.clock.util.AlarmBuilder;
+import com.alphabt.fx.control.clock.util.ClockTheme;
 import com.alphabt.fx.control.clock.worker.Worker;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -27,7 +29,7 @@ import javafx.util.Duration;
 
 import java.awt.*;
 
-class ClockViewSkin implements Skin<ClockView> {
+public class ClockViewSkin implements Skin<ClockView> {
 
     private StackPane root = new StackPane();
     private ClockView clockView;
@@ -60,21 +62,14 @@ class ClockViewSkin implements Skin<ClockView> {
 
     private void initialize() {
         Circle circle = new Circle();
-
-        circle.fillProperty().addListener((observable, oldValue, newValue) -> {
-            circle.setStrokeWidth(3);
-            circle.setStroke(((Color) newValue).darker());
-            circle.setStrokeType(StrokeType.OUTSIDE);
-        });
-
-        circle.fillProperty().bind(clockView.themeProperty().get().backgroundFillProperty());
+        circle.setStrokeWidth(3);
+        circle.setStrokeType(StrokeType.OUTSIDE);
         circle.radiusProperty().bind(clockView.radiusProperty());
         circle.scaleXProperty().bind(clockView.scaleXProperty());
         circle.scaleYProperty().bind(clockView.scaleYProperty());
         circle.scaleZProperty().bind(clockView.scaleZProperty());
 
         Text text = new Text();
-        text.fillProperty().bind(clockView.themeProperty().get().textFillProperty());
         text.scaleXProperty().bind(clockView.scaleXProperty());
         text.scaleYProperty().bind(clockView.scaleYProperty());
         text.scaleZProperty().bind(clockView.scaleZProperty());
@@ -124,7 +119,19 @@ class ClockViewSkin implements Skin<ClockView> {
         text.setFont(Font.font(circle.getRadius() / 3.5));
 
         ripple = new Ripple(circle);
-        ripple.fillProperty().bind(clockView.themeProperty().get().rippleFillProperty());
+
+
+        clockView.themeProperty().addListener((observable, oldValue, newValue) -> {
+            circle.setStroke(((Color) newValue.getBackgroundFill()).darker());
+            circle.setFill(newValue.getBackgroundFill());
+            text.setFill(newValue.getTextFill());
+            ripple.setFill(newValue.getRippleFill());
+        });
+
+        circle.setStroke(((Color) clockView.getTheme().getBackgroundFill()).darker());
+        circle.setFill(clockView.getTheme().getBackgroundFill());
+        text.setFill(clockView.getTheme().getTextFill());
+        ripple.setFill(clockView.getTheme().getRippleFill());
 
         root.addEventHandler(MouseEvent.ANY, event -> {
             if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
@@ -202,9 +209,10 @@ class ClockViewSkin implements Skin<ClockView> {
         }
 
         void animateScale() {
-            if (isStoppedScale())
+            if (isStoppedScale()) {
                 setOpacity(oldOpacity);
-            scaleTransition.playFromStart();
+                scaleTransition.playFromStart();
+            }
         }
 
         void animateOpacity() {
